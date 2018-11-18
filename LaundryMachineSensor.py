@@ -1,35 +1,16 @@
 from AudioProcessing import AudioProcessing
 from SimpleAlertLog import SimpleAlertLog as Alert
-import numpy as np
-import datetime
+from LaundryMachineStatus import LaundryMachineStatus
+import logging
 
-# ap = AudioProcessing(chunk=2048, rate=44100)
+
+logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s', level=logging.DEBUG)
+logging.info('Starting up!')
 ap = AudioProcessing(chunk=8192, rate=44100)
-previousIntensities = [0, 0, 0]
-wasLaundryMachineRunningBefore = False
-threshold = 1500
-needsToAlert = False
-
-
+ls = LaundryMachineStatus(threshold=1500)
 
 while True:
-    del previousIntensities[0]
-    previousIntensities.append(ap.getSoundIntensityForTimebox())
-    averageIntensities = np.mean(previousIntensities)
-    print (datetime.datetime.now())
-    print('average: ', averageIntensities)
-    if averageIntensities < threshold:
-        if wasLaundryMachineRunningBefore:
-            wasLaundryMachineRunningBefore = False
-            needsToAlert = True
-    else :
-        if wasLaundryMachineRunningBefore == False:
-            wasLaundryMachineRunningBefore = True
-            needsToAlert = True
-
-    if needsToAlert:
-        Alert.alertMachineStatusChanged(Alert, wasLaundryMachineRunningBefore)
-        needsToAlert=False
-
-
-
+    ls.insertNewSoundIntensity(ap.getSoundIntensityForTimebox())
+    logging.info('Average: ' + str(ls.currentSoundIntensity))
+    if ls.statusChanged == True:
+        Alert.alertMachineStatusChanged(Alert, ls.isRunning)

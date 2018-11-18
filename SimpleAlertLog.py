@@ -1,8 +1,10 @@
-
+import logging
 
 class SimpleAlertLog :
     def alertMachineStatusChanged (self, isMachineTurnedOn):
         if isMachineTurnedOn:
-            print('Machine turned on')
+            logging.info('Machine turned on')
         else :
-            print('Machine turned off')
+            logging.info('Machine turned off')
+
+    # def alertCurrentStatus(self, ):

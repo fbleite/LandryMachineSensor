@@ -1,11 +1,9 @@
 import pyaudio
 import numpy as np
-
+import logging
 
 class AudioProcessing :
-    def __init__(self,
-                 chunk=8192,
-                 rate=44100):
+    def __init__(self, chunk, rate):
         self.chunk = chunk
         self.rate = rate
         self.format = pyaudio.paInt16
@@ -18,13 +16,9 @@ class AudioProcessing :
         stream = self.player.open(format=self.format, channels=1, rate=self.rate, input=True, frames_per_buffer=self.chunk)
         for i in range(int(self.timebox * self.rate / self.chunk)):
             sound = stream.read(self.chunk, exception_on_overflow= False)
-            #sound = stream.read(self.chunk)
             allSound.extend(np.fromstring(sound, dtype=np.int16))
         stream.stop_stream()
         stream.close()
-        print('All Sound')
-        #allSound = [ elem for elem in  allSound if elem != 0]
-        # print(allSound)
         return self.calculateAbsotuteAverage(allSound)
 
 
