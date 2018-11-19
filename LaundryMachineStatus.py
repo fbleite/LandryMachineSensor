@@ -1,4 +1,5 @@
 import numpy as np
+import json
 
 class LaundryMachineStatus:
     def __init__(self, threshold) :
@@ -24,3 +25,20 @@ class LaundryMachineStatus:
             if self.isRunning == False:
                 self.isRunning = True
                 self.statusChanged = True
+
+    def generateAlertMessage (self) :
+        message = 'Machine is: '
+        if self.isRunning:
+            message += 'ON'
+        else :
+            message += 'OFF'
+        message += ' | '
+        message += ' Status has changed : ' + str(self.statusChanged)
+        message += ' | '
+        message += 'Current intensity is: ' + str(self.currentSoundIntensity)
+        return message
+
+    def generateJsonStatus(self):
+        return json.dumps({'machineStatusOn': str(self.isRunning),
+                           'hasStatusChanged': str(self.statusChanged),
+                           'currentIntensity': str(self.currentSoundIntensity)})
