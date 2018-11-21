@@ -1,6 +1,7 @@
-from SimpleAlertLog import SimpleAlertLog
 from AWSIoTPythonSDK.MQTTLib import AWSIoTMQTTClient
-import logging
+
+from SimpleAlertLog import SimpleAlertLog
+
 
 class AwsIotAlertLog(SimpleAlertLog):
 

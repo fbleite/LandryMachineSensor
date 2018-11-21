@@ -1,6 +1,7 @@
 from unittest import TestCase
 
-import AudioProcessing as ap
+from RaspberryPi import AudioProcessing as ap
+
 
 class test_AudioProcessing(TestCase):
     def test_calculateAbsoluteAveragePositive(self):

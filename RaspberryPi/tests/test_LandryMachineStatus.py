@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from LaundryMachineStatus import LaundryMachineStatus
+from RaspberryPi.LaundryMachineStatus import LaundryMachineStatus
 
 class test_LaundryMachineStatus(TestCase):
     def test_generateJsonStatus(self):
