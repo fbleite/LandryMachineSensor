@@ -19,5 +19,4 @@ class AwsIotAlertLog(SimpleAlertLog):
 
     def alertCurrentStatus(self, laundryMachineStatus):
         super().alertCurrentStatus(laundryMachineStatus)
-        logging.info('Super duper')
         self.myMQTTClient.publish("sensor/laundry_machine_status", laundryMachineStatus.generateJsonStatus(), 0)

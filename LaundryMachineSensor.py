@@ -5,7 +5,7 @@ from LaundryMachineStatus import LaundryMachineStatus
 import logging
 
 
-logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s', level=logging.DEBUG)
+logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s', level=logging.INFO)
 logging.info('Starting up!')
 ap = AudioProcessing(chunk=8192, rate=44100)
 ls = LaundryMachineStatus(threshold=1500)

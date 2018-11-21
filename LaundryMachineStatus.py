@@ -1,5 +1,6 @@
 import numpy as np
 import json
+import datetime
 
 class LaundryMachineStatus:
     def __init__(self, threshold) :
@@ -39,6 +40,8 @@ class LaundryMachineStatus:
         return message
 
     def generateJsonStatus(self):
-        return json.dumps({'machineStatusOn': str(self.isRunning),
-                           'hasStatusChanged': str(self.statusChanged),
-                           'currentIntensity': str(self.currentSoundIntensity)})
+        return json.dumps({'machineStatusOn': self.isRunning,
+                           'hasStatusChanged': self.statusChanged,
+                           'currentIntensity': self.currentSoundIntensity,
+                           'timestamp': datetime.datetime.now().isoformat(),
+                           'deviceId': 1})
