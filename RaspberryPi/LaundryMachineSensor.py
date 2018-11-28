@@ -17,7 +17,7 @@ def parseCommandLineArguments():
 
 
 def setupLogging():
-    logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s', level=logging.INFO)
+    logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s', level=logging.INFO, filename='sensor.log')
 
 setupLogging()
 args = parseCommandLineArguments()
@@ -25,7 +25,7 @@ args = parseCommandLineArguments()
 
 logging.info('Starting up!')
 ap = AudioProcessing(chunk=8192, rate=44100)
-ls = LaundryMachineStatus(threshold=args.threshold)
+ls = LaundryMachineStatus(threshold=int(args.threshold))
 alert = Alert(args)
 
 while True:
