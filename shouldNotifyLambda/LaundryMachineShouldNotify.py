@@ -8,8 +8,8 @@ def lambda_handler(event, context):
     # print("Received event: " + json.dumps(event, indent=2))
     for record in event['Records']:
         image = [key for key in record['dynamodb'] if key.endswith('Image')][0]
-        hasStatusChanged = record['dynamodb'][image]['payload']['M']['hasStatusChanged']['BOOL']
-        machineStatusOn = record['dynamodb'][image]['payload']['M']['machineStatusOn']['BOOL']
+        hasStatusChanged = record['dynamodb'][image]['hasStatusChanged']['BOOL']
+        machineStatusOn = record['dynamodb'][image]['machineStatusOn']['BOOL']
         if (hasStatusChanged):
             arn = 'arn:aws:sns:us-east-1:335553235753:laundryMachineAlert'
             client = boto3.client('sns')
