@@ -8,7 +8,7 @@ class AudioProcessing :
         self.rate = rate
         self.format = pyaudio.paInt16
         self.channels = 1
-        self.timebox = 5 #In seconds
+        self.timebox = 15 #In seconds
         self.player = pyaudio.PyAudio()
 
     def getSoundIntensityForTimebox(self):

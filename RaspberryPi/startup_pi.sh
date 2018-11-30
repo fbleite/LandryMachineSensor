@@ -5,5 +5,5 @@
                                 -c /home/pi/laundryMachineSensor/iotConnection/RaspberryPi.cert.pem \
                                 -k /home/pi/laundryMachineSensor/iotConnection/RaspberryPi.private.key \
                                 -id RaspberryPi \
-                                -t 21 \
+                                -t 11 \
                                 -l /home/pi/laundryMachineSensor/sensor.log

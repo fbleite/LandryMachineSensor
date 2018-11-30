@@ -5,7 +5,7 @@ import datetime
 class LaundryMachineStatus:
     def __init__(self, threshold) :
         self.threshold = threshold
-        self.previousIntensities = [0, 0, 0]
+        self.previousIntensities = [0] * 50
         self.isRunning = False
         self.statusChanged = False
         self.currentSoundIntensity = 0
