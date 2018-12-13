@@ -3,30 +3,37 @@
 <head>
 <meta charset="UTF-8">
 <title>Laundry Machine Status</title>
-
-<script>
-  fetch('https://hfg6wwwhx1.execute-api.us-east-1.amazonaws.com/prod/getLatestLaundryStatus')
-  .then(function(response) {
-    return response.json();
-  })
-  .then(function(myJson) {
-    document.getElementById("status").innerHTML = JSON.stringify(myJson['body']['machineStatusOn']);
-    console.log(JSON.stringify(myJson));
-  });
-</script>
+<link rel="shortcut icon" type="image/png" href="https://i.pinimg.com/originals/80/51/59/805159521cdc4d1fd11d75824fccc227.png"/>
+<script src="graph.js"></script>
 <style>
   img {
     background-color: green;
     color: green;
     opacity: 0.5;
   }
+  canvas{
+	border:1px solid #d3d3d3;
+  }
+   
+  * {
+	 font-size: 100%;
+	 font-family: Arial;
+	}
 </style>
 </head>
 <body>
 
-<h1 id="status">
-  Fetching
+<h1>
+  Is My Laundry Machine Cleaning
 </h1>
-<img alt="laundry" src="https://i.pinimg.com/originals/80/51/59/805159521cdc4d1fd11d75824fccc227.png" title="Laundry">
+
+<ul>
+	<li id="machineStatus">Is the machine running: Fetching...</li>
+	<li id="timestamp">Timestamp: Fetching...</li>
+</ul>
+
+<p id="here"></p>
+	<!--img alt="laundry" src="https://i.pinimg.com/originals/80/51/59/805159521cdc4d1fd11d75824fccc227.png" title="Laundry"-->
+<canvas id="myCanvas"></canvas>
 </body>
 </html>
