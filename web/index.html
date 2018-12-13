@@ -1,39 +1,43 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<meta charset="UTF-8">
-<title>Laundry Machine Status</title>
-<link rel="shortcut icon" type="image/png" href="https://i.pinimg.com/originals/80/51/59/805159521cdc4d1fd11d75824fccc227.png"/>
-<script src="graph.js"></script>
-<style>
-  img {
-    background-color: green;
-    color: green;
-    opacity: 0.5;
-  }
-  canvas{
-	border:1px solid #d3d3d3;
-  }
-   
-  * {
-	 font-size: 100%;
-	 font-family: Arial;
-	}
-</style>
+    <meta charset="UTF-8">
+    <title>Laundry Machine Status</title>
+    <link rel="shortcut icon" type="image/png" href="https://i.pinimg.com/originals/80/51/59/805159521cdc4d1fd11d75824fccc227.png" />
+    <script src="graph.js"></script>
+    <style>
+        canvas {
+            border: 1px solid #d3d3d3;
+        }
+
+        * {
+            font-size: 100%;
+            font-family: Arial;
+        }
+    </style>
 </head>
+
 <body>
+    <h1>
+        Is My Laundry Machine Running
+    </h1>
 
-<h1>
-  Is My Laundry Machine Cleaning
-</h1>
-
-<ul>
-	<li id="machineStatus">Is the machine running: Fetching...</li>
-	<li id="timestamp">Timestamp: Fetching...</li>
-</ul>
-
-<p id="here"></p>
-	<!--img alt="laundry" src="https://i.pinimg.com/originals/80/51/59/805159521cdc4d1fd11d75824fccc227.png" title="Laundry"-->
-<canvas id="myCanvas"></canvas>
+    <ul>
+        <li id="machineStatus">Is the machine running: Fetching...</li>
+        <li id="timestamp">Timestamp: Fetching...</li>
+    </ul>
+    <div>
+        <select id="graphWindow">
+            <option value="15">15 minutes</option>
+            <option value="60">1 Hour</option>
+            <option value="1440">24 Hours</option>
+            <option value="10080">1 Week</option>
+        </select>
+    </div>
+    <div>
+        <canvas id="myCanvas"></canvas>
+    </div>
 </body>
+
 </html>
