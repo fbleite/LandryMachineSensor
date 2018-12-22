@@ -2,14 +2,40 @@
 function init() {
     canvas = document.getElementById("myCanvas");
     ctx = canvas.getContext("2d");
-    adjustCanvasSize();
+    printGraph();
+    // getMockPointsAndPlot();
 
+}
+
+function printGraph() {
+    adjustCanvasSize();
+    getPointsAndPlot();
+}
+
+function getMockPointsAndPlot() {
     var latestStatus = getMockLatestStatus();
     updateLatestStatus(latestStatus);
-
     intensityPoints = getMockLaundryDataPoints();
     plotPoints(intensityPoints);
+}
 
+function getPointsAndPlot() {
+
+    fetch('https://hfg6wwwhx1.execute-api.us-east-1.amazonaws.com/prod/getLatestLaundryStatus')
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (myJson) {
+            var timestamp = myJson['body']['timestamp'];
+            return new IntensityPoint(myJson['body']['machineStatusOn'], timestamp, null) ;
+        })
+        .then(function (latestStatus) {
+            updateLatestStatus(latestStatus);
+            return latestStatus;
+        })
+        .then(function(latestStatus) {
+            getLaundryDataPoints(latestStatus);
+        }) ;
 }
 
 function updateLatestStatus(latestStatus) {
@@ -28,17 +54,6 @@ function getMockLatestStatus() {
     var timestamp = new Date(Date.now());
     var intensity = Math.random() * 15;
     return new IntensityPoint(machineOn, timestamp, intensity);
-}
-
-function getLatestStatus() {
-    return fetch('https://hfg6wwwhx1.execute-api.us-east-1.amazonaws.com/prod/getLatestLaundryStatus')
-        .then(function (response) {
-            return response.json();
-        })
-        .then(function (myJson) {
-            var timestamp = new Date(myJson['body']['timestamp']);
-            return new IntensityPoint(myJson['body']['machineStatusOn'], timestamp, null);
-        });
 }
 
 function compareIntensityPoints(a, b) {
@@ -81,19 +96,38 @@ function adjustCanvasSize() {
 
 function IntensityPoint(machineOn, timestamp, intensity) {
     this.machineOn = machineOn;
-    this.timestamp = timestamp;
+    this.timestamp = new Date(timestamp);
+    this.timestampISO = timestamp;
     this.intensity = intensity;
 }
 
-function getLaundryDataPoints() {
-    fetch('https://hfg6wwwhx1.execute-api.us-east-1.amazonaws.com/prod/getlaundrystatusrange')
+function getLaundryDataPoints(latestStatus) {
+    var url = new URL('https://hfg6wwwhx1.execute-api.us-east-1.amazonaws.com/prod/getlaundrystatusrange'),
+    
+    params = {timestamp:latestStatus.timestampISO, window:getWindowValue()}
+    Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))   
+
+    fetch(url)
         .then(function (response) {
             return response.json();
         })
         .then(function (dataPoints) {
-            document.getElementById("here").innerHTML = JSON.stringify(dataPoints['body']);
+            intensityPoints = [];
+            dataPoints['points'].forEach(point => {
+                intensityPoints.push(new IntensityPoint(point['machineStatusOn'], 
+                                    point['timestamp'],
+                                    point['currentIntensity']));
+            });
+            return intensityPoints.sort(compareIntensityPoints);
+        })
+        .then(function (intensityPoints) {
+            plotPoints(intensityPoints);
         });
+}
 
+function getWindowValue() {
+    var e = document.getElementById("graphWindow");
+    return e.options[e.selectedIndex].value;
 }
 
 function getMockLaundryDataPoints() {
@@ -125,8 +159,4 @@ window.onload = init;
 window.addEventListener("resize", function () {
     adjustCanvasSize();
     plotPoints(intensityPoints);
-});
-
-window.addEventListener("select", function() {
-    console.log("Hello form the event!!!");
 });

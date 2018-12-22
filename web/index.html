@@ -28,7 +28,7 @@
         <li id="timestamp">Timestamp: Fetching...</li>
     </ul>
     <div>
-        <select id="graphWindow">
+        <select id="graphWindow" onchange="printGraph()">
             <option value="15">15 minutes</option>
             <option value="60">1 Hour</option>
             <option value="1440">24 Hours</option>
@@ -38,6 +38,7 @@
     <div>
         <canvas id="myCanvas"></canvas>
     </div>
+    <p id="here"></p>
 </body>
 
 </html>
