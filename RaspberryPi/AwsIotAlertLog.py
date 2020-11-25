@@ -20,7 +20,7 @@ class AwsIotAlertLog(SimpleAlertLog):
         self.myMQTTClient.configureConnectDisconnectTimeout(10)  # 10 sec
         self.myMQTTClient.configureMQTTOperationTimeout(5)  # 5 sec
         self.myMQTTClient.connect()
-        self.lastAlertedStatus = None
+        self.lastAlertedSoundIntensity = None
         self.lastTimeAlerted = datetime.now()
 
 
@@ -29,11 +29,11 @@ class AwsIotAlertLog(SimpleAlertLog):
         if shouldAlertAws(self.lastAlertedStatus, self.lastTimeAlerted, laundryMachineStatus, datetime.now()):
             logging.info("publishing to AWS")
             self.myMQTTClient.publish("sensor/laundry_machine_status", laundryMachineStatus.generateJsonStatus(), 0)
-            self.lastAlertedStatus = laundryMachineStatus
+            self.lastAlertedSoundIntensity = laundryMachineStatus.currentSoundIntensity
 
 
-def shouldAlertAws(lastAlertedStatus, lastTimeAlerted, currentLMS, currentTime):
-    if lastAlertedStatus == None:
+def shouldAlertAws(lastAlertedSoundIntensity, lastTimeAlerted, currentLMS, currentTime):
+    if lastAlertedSoundIntensity == None:
         return True
     if currentLMS.statusChanged:
         return True
@@ -41,7 +41,7 @@ def shouldAlertAws(lastAlertedStatus, lastTimeAlerted, currentLMS, currentTime):
         return True
     if currentTime - lastTimeAlerted > timedelta(minutes=60):
         return True
-    if np.abs(currentLMS.currentSoundIntensity - lastAlertedStatus.currentSoundIntensity) > 1:
+    if np.abs(currentLMS.currentSoundIntensity - lastAlertedSoundIntensity) > 1:
         return True
     return False
 
