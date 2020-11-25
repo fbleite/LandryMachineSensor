@@ -41,7 +41,7 @@ def shouldAlertAws(lastAlertedStatus, lastTimeAlerted, currentLMS, currentTime):
         return True
     if currentTime - lastTimeAlerted > timedelta(minutes=60):
         return True
-    if np.abs(currentLMS.currentIntensity - lastAlertedStatus.currentIntensity) > 1:
+    if np.abs(currentLMS.currentSoundIntensity - lastAlertedStatus.currentSoundIntensity) > 1:
         return True
     return False
 
