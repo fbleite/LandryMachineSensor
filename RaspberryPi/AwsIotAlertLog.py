@@ -1,5 +1,7 @@
 from AWSIoTPythonSDK.MQTTLib import AWSIoTMQTTClient
-
+from datetime import datetime
+from datetime import timedelta
+import numpy as np
 from SimpleAlertLog import SimpleAlertLog
 
 
@@ -17,8 +19,27 @@ class AwsIotAlertLog(SimpleAlertLog):
         self.myMQTTClient.configureConnectDisconnectTimeout(10)  # 10 sec
         self.myMQTTClient.configureMQTTOperationTimeout(5)  # 5 sec
         self.myMQTTClient.connect()
+        self.lastAlertedStatus = None
+        self.lastTimeAlerted = datetime.now()
 
 
     def alertCurrentStatus(self, laundryMachineStatus):
         super().alertCurrentStatus(laundryMachineStatus)
-        self.myMQTTClient.publish("sensor/laundry_machine_status", laundryMachineStatus.generateJsonStatus(), 0)
+        if self.shouldAlertAws(self.lastAlertedStatus, self.lastTimeAlerted, laundryMachineStatus, datetime.now()):
+            self.myMQTTClient.publish("sensor/laundry_machine_status", laundryMachineStatus.generateJsonStatus(), 0)
+            self.lastAlertedStatus = laundryMachineStatus
+
+
+def shouldAlertAws(lastAlertedStatus, lastTimeAlerted, currentLMS, currentTime):
+    if lastAlertedStatus == None:
+        return True
+    if currentLMS.statusChanged:
+        return True
+    if currentLMS.isRunning:
+        return True
+    if currentTime - lastTimeAlerted > timedelta(minutes=60):
+        return True
+    if np.abs(currentLMS.currentIntensity - lastAlertedStatus.currentIntensity) > 1:
+        return True
+    return False
+
