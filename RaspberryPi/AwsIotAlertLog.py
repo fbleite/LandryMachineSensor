@@ -26,7 +26,7 @@ class AwsIotAlertLog(SimpleAlertLog):
 
     def alertCurrentStatus(self, laundryMachineStatus):
         super().alertCurrentStatus(laundryMachineStatus)
-        if self.shouldAlertAws(self.lastAlertedStatus, self.lastTimeAlerted, laundryMachineStatus, datetime.now()):
+        if shouldAlertAws(self.lastAlertedStatus, self.lastTimeAlerted, laundryMachineStatus, datetime.now()):
             logging.info("publishing to AWS")
             self.myMQTTClient.publish("sensor/laundry_machine_status", laundryMachineStatus.generateJsonStatus(), 0)
             self.lastAlertedStatus = laundryMachineStatus
