@@ -3,6 +3,8 @@ Description=Laundry Machine Sensor Service
 After=multi-user.target
 
 [Service]
+Restart=on-failure
+RestartSec=5s
 Type=idle
 ExecStart=/home/pi/laundryMachineSensor/LandryMachineSensor/RaspberryPi/startup_pi.sh
 
