@@ -2,6 +2,7 @@ from AWSIoTPythonSDK.MQTTLib import AWSIoTMQTTClient
 from datetime import datetime
 from datetime import timedelta
 import numpy as np
+import logging
 from SimpleAlertLog import SimpleAlertLog
 
 
@@ -26,6 +27,7 @@ class AwsIotAlertLog(SimpleAlertLog):
     def alertCurrentStatus(self, laundryMachineStatus):
         super().alertCurrentStatus(laundryMachineStatus)
         if self.shouldAlertAws(self.lastAlertedStatus, self.lastTimeAlerted, laundryMachineStatus, datetime.now()):
+            logging.info("publishing to AWS")
             self.myMQTTClient.publish("sensor/laundry_machine_status", laundryMachineStatus.generateJsonStatus(), 0)
             self.lastAlertedStatus = laundryMachineStatus
 
