@@ -20,7 +20,7 @@ class AwsIotAlertLog(SimpleAlertLog):
         self.myMQTTClient.configureConnectDisconnectTimeout(10)  # 10 sec
         self.myMQTTClient.configureMQTTOperationTimeout(5)  # 5 sec
         self.myMQTTClient.connect()
-        self.lastAlertedSoundIntensity = None
+        self.lastAlertedSoundIntensity = 0
         self.lastTimeAlerted = datetime.now()
 
 
