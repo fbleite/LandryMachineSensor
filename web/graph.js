@@ -64,7 +64,33 @@ function compareIntensityPoints(a, b) {
     return 0;
 }
 
+
 function plotPoints(intensityPoints) {
+    var maxIntensity = 3 + Math.ceil(intensityPoints.reduce(function (a, b) { return a.intensity > b.intensity ? a : b; }).intensity);
+    var YPixelsPerIntensity = (canvas.height - (upperMargin + lowerMargin)) / maxIntensity;
+    var totalTimeSpace = intensityPoints[intensityPoints.length-1].timestamp - intensityPoints[0].timestamp;
+
+    ctx.beginPath();
+    ctx.moveTo(0 + leftMargin, canvas.height - lowerMargin - intensityPoints[0].intensity * YPixelsPerIntensity);
+    if (intensityPoints.length == 1) {
+        ctx.lineTo(canvas.width - rightMargin, canvas.height - lowerMargin - intensityPoints[0].intensity * YPixelsPerIntensity);
+    }
+    for (var i = 1; i < intensityPoints.length; i++) {
+        var currentTimeSpace = intensityPoints[i].timestamp - intensityPoints[0].timestamp;
+        ctx.lineTo(getXPosition(totalTimeSpace, currentTimeSpace), canvas.height - lowerMargin - intensityPoints[i].intensity * YPixelsPerIntensity);
+    }
+    ctx.stroke();
+    ctx.font = "15px Arial";
+    ctx.fillText(maxIntensity, leftMargin - 30, upperMargin + 15);
+}
+
+function getXPosition(totalTimeSpace, currentTimeSpace) {
+    var proportionalTimeSpace = currentTimeSpace/totalTimeSpace;
+    var usableCanvasXSpace = canvas.width - (rightMargin + leftMargin);
+    return leftMargin + proportionalTimeSpace * usableCanvasXSpace
+}
+
+function plotPoints_old(intensityPoints) {
     var maxIntensity = 3 + Math.ceil(intensityPoints.reduce(function (a, b) { return a.intensity > b.intensity ? a : b; }).intensity);
     var YPixelsPerIntensity = (canvas.height - (upperMargin + lowerMargin)) / maxIntensity;
     var XPixelsPerPeriod = (canvas.width - (rightMargin + leftMargin)) / intensityPoints.length;
